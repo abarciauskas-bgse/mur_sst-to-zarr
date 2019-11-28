@@ -1,0 +1,11 @@
+name: netcdf_to_zarr
+dependencies:
+  - numpy
+  - dask
+  - jupyter
+  - nb_conda
+  - xarray>=0.14
+  - pip
+  - pip:
+    - numcodecs
+    - xarray>=0.14
