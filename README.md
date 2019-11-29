@@ -68,6 +68,8 @@ c.NotebookApp.ip = '*'
 
 Follow these instructions [How to mount PO.DAAC Drive on your local computer via Linux](https://podaac.jpl.nasa.gov/forum/viewtopic.php?f=75&t=1026)
 
+In practice, opening a set of 5 files using xr.open_mfdataset took over 3 minutes using this method, so it's probably not better than using a developer's machine with a HD attached.
+
 ## Tests
 
 ### Creating Zarr files
