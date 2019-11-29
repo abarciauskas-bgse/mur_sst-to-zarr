@@ -5,6 +5,7 @@ dependencies:
   - jupyter
   - nb_conda
   - xarray>=0.14
+  - cython
   - pip
   - pip:
     - numcodecs

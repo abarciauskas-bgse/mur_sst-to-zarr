@@ -15,7 +15,58 @@ jupyter notebook
 
 Requires WebDAV credentials.
 
+#### MacOSX
+
 Follow these instructions [How to mount PO.DAAC Drive on your local computer via OS X](https://podaac.jpl.nasa.gov/forum/viewtopic.php?f=75&t=1020)
+
+#### Amazon Linux
+
+Using caffe_python3_cpu-171216-ubuntu-16.04-95768314-1460-4c0e-a521-65743f73f245-ami-d6c6b4ac.4
+
+```
+sudo dpkg --configure -a
+sudo apt-get install davfs2
+sudo mkdir /mnt/podaac_drive
+sudo mount.davfs https://podaac-tools.jpl.nasa.gov/drive/files /mnt/podaac_drive
+```
+
+Install conda ([reference](https://www.digitalocean.com/community/tutorials/how-to-install-anaconda-on-ubuntu-18-04-quickstart)):
+```
+cd /tmp
+curl -O https://repo.anaconda.com/archive/Anaconda3-2019.03-Linux-x86_64.sh
+
+# verify data integrity
+sha256sum Anaconda3-2019.03-Linux-x86_64.sh
+# should be
+# 45c851b7497cc14d5ca060064394569f724b67d9b5f98a926ed49b834a6bb73a  Anaconda3-2019.03-Linux-x86_64.sh
+
+# Run the installer
+bash Anaconda3-2019.03-Linux-x86_64.sh 
+```
+
+
+```
+git clone https://github.com/abarciauskas-bgse/mur_sst-to-zarr
+cd mur_sst-to-zarr
+conda env create -f environment.yml
+source activate netcdf_to_zarr
+```
+
+Configure jupyter as a remote server. Specifically:
+
+```
+jupyter notebook --generate-config
+```
+
+And then edit `jupyter_notebook_config.py`:
+
+```
+c.NotebookApp.ip = '*'
+```
+
+[For reference: Running a Notebook Server](https://jupyter-notebook.readthedocs.io/en/stable/public_server.html)
+
+Follow these instructions [How to mount PO.DAAC Drive on your local computer via Linux](https://podaac.jpl.nasa.gov/forum/viewtopic.php?f=75&t=1026)
 
 ## Tests
 
