@@ -21,16 +21,18 @@ Follow these instructions [How to mount PO.DAAC Drive on your local computer via
 
 #### Amazon Linux
 
-Using caffe_python3_cpu-171216-ubuntu-16.04-95768314-1460-4c0e-a521-65743f73f245-ami-d6c6b4ac.4
+Used caffe_python3_cpu-171216-ubuntu-16.04-95768314-1460-4c0e-a521-65743f73f245-ami-d6c6b4ac.4 and anaconda3-4.4.0-on-ubuntu-16.04-lts (ami-bc0d52aa).
+
+Had some issues installing xarray>=0.14 and numcodecs (gcc failure). Removed some libs from environment.yml. Often have to kill an apt process after logging on.
 
 ```
 sudo dpkg --configure -a
-sudo apt-get install davfs2
+sudo apt-get install davfs2 -y
 sudo mkdir /mnt/podaac_drive
 sudo mount.davfs https://podaac-tools.jpl.nasa.gov/drive/files /mnt/podaac_drive
 ```
 
-Install conda ([reference](https://www.digitalocean.com/community/tutorials/how-to-install-anaconda-on-ubuntu-18-04-quickstart)):
+May need to install conda ([reference](https://www.digitalocean.com/community/tutorials/how-to-install-anaconda-on-ubuntu-18-04-quickstart)):
 ```
 cd /tmp
 curl -O https://repo.anaconda.com/archive/Anaconda3-2019.03-Linux-x86_64.sh
@@ -43,7 +45,6 @@ sha256sum Anaconda3-2019.03-Linux-x86_64.sh
 # Run the installer
 bash Anaconda3-2019.03-Linux-x86_64.sh 
 ```
-
 
 ```
 git clone https://github.com/abarciauskas-bgse/mur_sst-to-zarr
