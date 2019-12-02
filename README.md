@@ -21,53 +21,18 @@ Follow these instructions [How to mount PO.DAAC Drive on your local computer via
 
 #### Amazon Linux
 
-Used caffe_python3_cpu-171216-ubuntu-16.04-95768314-1460-4c0e-a521-65743f73f245-ami-d6c6b4ac.4 and anaconda3-4.4.0-on-ubuntu-16.04-lts (ami-bc0d52aa).
+1. Launch an AWS EC2 using amzn2-ami-ecs-hvm-2.0.20191114-x86_64-ebs (ami-097e3d1cdb541f43)
+2. Login and install git `sudo yum install git -y`
+3. Build and run docker container:
 
-Had some issues installing xarray>=0.14 and numcodecs (gcc failure). Removed some libs from environment.yml. Often have to kill an apt process after logging on.
-
-```
-sudo dpkg --configure -a
-sudo apt-get install davfs2 -y
-sudo mkdir /mnt/podaac_drive
-sudo mount.davfs https://podaac-tools.jpl.nasa.gov/drive/files /mnt/podaac_drive
-```
-
-May need to install conda ([reference](https://www.digitalocean.com/community/tutorials/how-to-install-anaconda-on-ubuntu-18-04-quickstart)):
-```
-cd /tmp
-curl -O https://repo.anaconda.com/archive/Anaconda3-2019.03-Linux-x86_64.sh
-
-# verify data integrity
-sha256sum Anaconda3-2019.03-Linux-x86_64.sh
-# should be
-# 45c851b7497cc14d5ca060064394569f724b67d9b5f98a926ed49b834a6bb73a  Anaconda3-2019.03-Linux-x86_64.sh
-
-# Run the installer
-bash Anaconda3-2019.03-Linux-x86_64.sh 
-```
-
-```
+```sh
 git clone https://github.com/abarciauskas-bgse/mur_sst-to-zarr
 cd mur_sst-to-zarr
-conda env create -f environment.yml
-source activate netcdf_to_zarr
+export WEBDAV_USER=<ADD ME>
+export WEBDAV_PASS=<ADD ME>
+docker build --no-cache --build-arg WEBDAV_USER=$WEBDAV_USER --build-arg WEBDAV_PASS=$WEBDAV_PASS -t mursst_to_zarr .
+docker run -it -p 8888:8888 -p 8787:8787 --privileged --cap-add=SYS_ADMIN --device /dev/fuse mursst_to_zarr
 ```
-
-Configure jupyter as a remote server. Specifically:
-
-```
-jupyter notebook --generate-config
-```
-
-And then edit `jupyter_notebook_config.py`:
-
-```
-c.NotebookApp.ip = '*'
-```
-
-[For reference: Running a Notebook Server](https://jupyter-notebook.readthedocs.io/en/stable/public_server.html)
-
-Follow these instructions [How to mount PO.DAAC Drive on your local computer via Linux](https://podaac.jpl.nasa.gov/forum/viewtopic.php?f=75&t=1026)
 
 In practice, opening a set of 5 files using xr.open_mfdataset took over 3 minutes using this method, so it's probably not better than using a developer's machine with a HD attached.
 
