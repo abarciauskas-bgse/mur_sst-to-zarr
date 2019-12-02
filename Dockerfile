@@ -1,5 +1,6 @@
 FROM continuumio/anaconda3
 
+ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get install davfs2 -y
 RUN echo 'https://podaac-tools.jpl.nasa.gov/drive/files $WEBDAV_USER $WEBDAV_PASS' > /etc/davfs2/secrets
 RUN mkdir /mnt/podaac_drive
