@@ -1,9 +1,14 @@
 name: netcdf_to_zarr
+channels:
+  - conda-forge
+  - defaults
 dependencies:
   - numpy
   - dask
   - jupyter
   - nb_conda
   - xarray
+  - zarr
   - cython
   - pip
+  - netcdf4

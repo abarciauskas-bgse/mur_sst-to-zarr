@@ -12,7 +12,7 @@ RUN mkdir /mnt/podaac_drive
 
 RUN git clone https://github.com/abarciauskas-bgse/mur_sst-to-zarr
 WORKDIR /mur_sst-to-zarr
-RUN cat environment.yml
 RUN conda env create -f environment.yml
 
-ENTRYPOINT ["sh", "./run.sh"]
+COPY run.sh /mur_sst-to-zarr/run.sh
+ENTRYPOINT ["/bin/bash", "./run.sh"]
