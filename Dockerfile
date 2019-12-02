@@ -13,6 +13,7 @@ RUN mkdir /mnt/podaac_drive
 
 RUN git clone https://github.com/abarciauskas-bgse/mur_sst-to-zarr
 WORKDIR /mur_sst-to-zarr
+RUN cat environment.yml
 RUN conda env create -f environment.yml
-RUN source activate netcdf_to_zarr
+# RUN source activate netcdf_to_zarr
 
