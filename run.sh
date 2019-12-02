@@ -1,4 +1,4 @@
-!#/bin/bash
+#!/bin/bash
 
 mount.davfs https://podaac-tools.jpl.nasa.gov/drive/files /mnt/podaac_drive
 source activate netcdf_to_zarr

@@ -15,4 +15,4 @@ WORKDIR /mur_sst-to-zarr
 RUN cat environment.yml
 RUN conda env create -f environment.yml
 
-ENTRYPOINT ['./run.sh']
+ENTRYPOINT ["sh", "./run.sh"]
