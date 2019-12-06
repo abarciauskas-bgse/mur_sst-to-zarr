@@ -31,7 +31,7 @@ cd mur_sst-to-zarr
 export WEBDAV_USER=<ADD ME>
 export WEBDAV_PASS=<ADD ME>
 docker build --no-cache --build-arg WEBDAV_USER=$WEBDAV_USER --build-arg WEBDAV_PASS=$WEBDAV_PASS -t mursst_to_zarr .
-docker run -it -p 8888:8888 -p 8787:8787 --privileged --cap-add=SYS_ADMIN --device /dev/fuse mursst_to_zarr
+docker run -it -v /data/mursst_netcdf:/data/mursst_netcdf --privileged --cap-add=SYS_ADMIN --device /dev/fuse mursst_to_zarr
 ```
 
 In practice, opening a set of 5 files using xr.open_mfdataset took over 3 minutes using this method, so it's probably not better than using a developer's machine with a HD attached.
