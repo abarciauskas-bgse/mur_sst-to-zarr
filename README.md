@@ -22,7 +22,10 @@ Follow these instructions [How to mount PO.DAAC Drive on your local computer via
 #### Amazon Linux
 
 1. Launch an AWS EC2 using amzn2-ami-ecs-hvm-2.0.20191114-x86_64-ebs (ami-097e3d1cdb541f43)
-2. Login and install git `sudo yum install git -y`
+    * Ensure enough storage
+    * Ensure security group with access on ports 22 (ssh), 8888 (jupyter) and 8787 (dask)
+    * Lauch with an EC2 keypair you are the owner of
+2. Login via SSH and install docker and git `sudo yum install git docker -y`
 3. Build and run docker container:
 
 ```sh
