@@ -1,2 +1,6 @@
 .ipynb_checkpoints/
 dask-worker-space/
+terraform.tfstate
+terraform.tfstate.backup
+.terraform/
+terraform.tfvars
