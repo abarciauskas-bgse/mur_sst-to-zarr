@@ -6,6 +6,7 @@ ENV WEBDAV_USER=$WEBDAV_USER
 ENV WEBDAV_PASS=$WEBDAV_PASS
 
 ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get update
 RUN apt-get install davfs2 makedev fuse -y
 RUN echo https://podaac-tools.jpl.nasa.gov/drive/files $WEBDAV_USER $WEBDAV_PASS > /etc/davfs2/secrets
 RUN mkdir /mnt/podaac_drive

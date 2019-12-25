@@ -1,7 +1,9 @@
 provider "aws" {
-  # version = "~> 3.0"
   region = "us-east-1"
 }
+
+data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
 
 variable "deployment" {
   description = "Deployment-specific prefix to distinguish multiple deployments, for multiple developers or environments."
@@ -39,6 +41,15 @@ data "template_file" "ecs_instance_init" {
   }
 }
 
+data "template_file" "podaac_drive_task_definition" {
+  template = "${file("task-definitions/data-staging/podaac_drive.json.tpl")}"
+
+  vars = {
+    aws_account_id = data.aws_caller_identity.current.account_id
+    aws_region = data.aws_region.current.name
+  }
+}
+
 resource "aws_launch_configuration" "as_conf" {
   name          = "web_config"
   image_id      = data.aws_ami.amazon-linux-2-ecs-optimized.id
@@ -56,5 +67,19 @@ resource "aws_autoscaling_group" "ecs_asg" {
   max_size           = 1
   min_size           = 1
   launch_configuration = aws_launch_configuration.as_conf.id
+  initial_lifecycle_hook {
+    name = "ecs_asg_launching_hook"
+    lifecycle_transition = "autoscaling:EC2_INSTANCE_LAUNCHING"
+    role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/ecsInstanceRole"
+  }
 }
 
+resource "aws_ecs_task_definition" "podaac_drive" {
+  family = "eodc-podaac_drive"
+  container_definitions = data.template_file.podaac_drive_task_definition.rendered
+
+  volume {
+    name      = "service-storage"
+    host_path = "/data"
+  }
+}
