@@ -5,17 +5,13 @@
 ## Build Image
 
 ```bash
-export DOCKER_TAG=eodc-mount-podaac-drive
-export WEBDAV_USER=<ADD ME>
-export WEBDAV_PASS=<ADD ME>
-docker build --build-arg WEBDAV_USER=$WEBDAV_USER --build-arg WEBDAV_PASS=$WEBDAV_PASS -t $DOCKER_TAG .
+export DOCKER_TAG=eodc-netcdf-to-zarrr
+docker build -t $DOCKER_TAG .
 ```
 
 ## Run Container
 ```bash
-docker run -it -v /data:/data --privileged --cap-add=SYS_ADMIN --device /dev/fuse $DOCKER_TAG <PODAAC DRIVE PATH> <LOCAL FS PATH>
-# example <PODAAC DRIVE PATH>: allData/ghrsst/data/GDS2/L4/GLOB/JPL/MUR/v4.1/2003
-# example <LOCAL FS PATH>: mursst_netcdf
+docker run -v /data:/data $DOCKER_TAG
 ```
 
 ## Push to AWS ECR

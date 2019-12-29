@@ -50,12 +50,22 @@ data "template_file" "podaac_drive_task_definition" {
   }
 }
 
+data "template_file" "netcdf_to_zarr_task_definition" {
+  template = "${file("task-definitions/netcdf-to-zarr.json.tpl")}"
+
+  vars = {
+    aws_account_id = data.aws_caller_identity.current.account_id
+    aws_region = data.aws_region.current.name
+  }
+}
+
 resource "aws_launch_configuration" "as_conf" {
   name          = "web_config"
   image_id      = data.aws_ami.amazon-linux-2-ecs-optimized.id
   instance_type = "m5.2xlarge"
   user_data = data.template_file.ecs_instance_init.rendered
   key_name = var.keypair
+  iam_instance_profile = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:instance-profile/ecsInstanceRole"
   root_block_device {
     volume_size = 20
   }
@@ -67,11 +77,6 @@ resource "aws_autoscaling_group" "ecs_asg" {
   max_size           = 1
   min_size           = 1
   launch_configuration = aws_launch_configuration.as_conf.id
-  initial_lifecycle_hook {
-    name = "ecs_asg_launching_hook"
-    lifecycle_transition = "autoscaling:EC2_INSTANCE_LAUNCHING"
-    role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/ecsInstanceRole"
-  }
 }
 
 resource "aws_ecs_task_definition" "podaac_drive" {
@@ -83,3 +88,14 @@ resource "aws_ecs_task_definition" "podaac_drive" {
     host_path = "/data"
   }
 }
+
+resource "aws_ecs_task_definition" "netcdf_to_zarr" {
+  family = "eodc-netcdf_to_zarr"
+  container_definitions = data.template_file.netcdf_to_zarr_task_definition.rendered
+
+  volume {
+    name      = "service-storage"
+    host_path = "/data"
+  }
+}
+
