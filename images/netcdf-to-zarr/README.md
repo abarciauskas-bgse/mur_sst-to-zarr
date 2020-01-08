@@ -2,16 +2,23 @@
 
 ... and optionally copy files locally
 
+## Build Base Image
+
+```bash
+export DOCKER_TAG=conda-zarr-base
+docker build -t $DOCKER_TAG -f Dockerfile.base .
+```
+
 ## Build Image
 
 ```bash
-export DOCKER_TAG=eodc-netcdf-to-zarrr
+export DOCKER_TAG=eodc-netcdf-to-zarr
 docker build -t $DOCKER_TAG .
 ```
 
 ## Run Container
 ```bash
-docker run -v /data:/data $DOCKER_TAG
+docker run -it -v /data:/data $DOCKER_TAG
 ```
 
 ## Push to AWS ECR

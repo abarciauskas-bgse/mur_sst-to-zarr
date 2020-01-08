@@ -62,12 +62,12 @@ data "template_file" "netcdf_to_zarr_task_definition" {
 resource "aws_launch_configuration" "as_conf" {
   name          = "web_config"
   image_id      = data.aws_ami.amazon-linux-2-ecs-optimized.id
-  instance_type = "m5.2xlarge"
+  instance_type = "m5.8xlarge"
   user_data = data.template_file.ecs_instance_init.rendered
   key_name = var.keypair
   iam_instance_profile = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:instance-profile/ecsInstanceRole"
   root_block_device {
-    volume_size = 20
+    volume_size = 200
   }
 }
 

@@ -3,8 +3,8 @@
     "name": "eodc-netcdf-to-zarr-task-def",
     "image":
     "${aws_account_id}.dkr.ecr.${aws_region}.amazonaws.com/eodc-netcdf-to-zarr",
-    "cpu": 6,
-    "memory": 30000,
+    "cpu": 30,
+    "memory": 120000,
     "essential": true,
     "mountPoints": [{
       "sourceVolume": "service-storage",
