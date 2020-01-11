@@ -60,12 +60,18 @@ data "template_file" "netcdf_to_zarr_task_definition" {
 }
 
 resource "aws_launch_configuration" "as_conf" {
-  name          = "web_config"
+  name          = "eodc-ecs-cluster"
   image_id      = data.aws_ami.amazon-linux-2-ecs-optimized.id
   instance_type = "m5.8xlarge"
   user_data = data.template_file.ecs_instance_init.rendered
   key_name = var.keypair
   iam_instance_profile = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:instance-profile/ecsInstanceRole"
+
+  ebs_block_device {
+    device_name = "/dev/xvdcz"
+    volume_size = 200
+  }
+
   root_block_device {
     volume_size = 200
   }
@@ -77,6 +83,12 @@ resource "aws_autoscaling_group" "ecs_asg" {
   max_size           = 1
   min_size           = 1
   launch_configuration = aws_launch_configuration.as_conf.id
+
+  tag {
+    key                 = "project"
+    value               = "eodc"
+    propagate_at_launch = true
+  }
 }
 
 resource "aws_ecs_task_definition" "podaac_drive" {

@@ -10,6 +10,15 @@
       "sourceVolume": "service-storage",
       "containerPath": "/data"
     }],
+    "portMappings": [{
+      "hostPort": 8888,
+      "protocol": "tcp",
+      "containerPort": 8888
+    }, {
+      "hostPort": 8787,
+      "protocol": "tcp",
+      "containerPort": 8787
+    }],
     "logConfiguration": {
       "logDriver": "awslogs",
       "secretOptions": null,
