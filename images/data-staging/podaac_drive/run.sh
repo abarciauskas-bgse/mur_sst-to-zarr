@@ -3,5 +3,5 @@
 mount.davfs https://podaac-tools.jpl.nasa.gov/drive/files /mnt/podaac_drive
 export PODAAC_DRIVE_PATH=$1
 export LOCAL_FS_PATH=$2
-cp -r /mnt/podaac_drive/$PODAAC_DRIVE_PATH /data/$LOCAL_FS_PATH
+cp -r /mnt/podaac_drive/$PODAAC_DRIVE_PATH /fsx/$LOCAL_FS_PATH
 

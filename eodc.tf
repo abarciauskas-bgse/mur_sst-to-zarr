@@ -97,7 +97,7 @@ resource "aws_ecs_task_definition" "podaac_drive" {
 
   volume {
     name      = "service-storage"
-    host_path = "/data"
+    host_path = "/fsx"
   }
 }
 
@@ -107,7 +107,7 @@ resource "aws_ecs_task_definition" "netcdf_to_zarr" {
 
   volume {
     name      = "service-storage"
-    host_path = "/data"
+    host_path = "/fsx"
   }
 }
 

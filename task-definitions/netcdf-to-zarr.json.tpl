@@ -8,7 +8,7 @@
     "essential": true,
     "mountPoints": [{
       "sourceVolume": "service-storage",
-      "containerPath": "/data"
+      "containerPath": "/fsx"
     }],
     "portMappings": [{
       "hostPort": 8888,
