@@ -12,3 +12,4 @@ dependencies:
   - cython
   - pip
   - netcdf4
+  - s3fs

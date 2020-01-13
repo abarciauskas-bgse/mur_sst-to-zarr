@@ -26,10 +26,10 @@ def generate_file_list(start_doy, end_doy):
 
 # Invariants - but should be made configurable
 year = 2002
-prefix = f"/data/mursst_netcdf/{year}"
+prefix = f"/fsx/eodc/mursst_netcdf/{year}"
 chunks = {'time': 5, 'lat': 1000, 'lon': 1000}
 path = 'x'.join(map(str, chunks.values()))
-store_dir = f"/data/mursst_zarr/{path}"
+store_dir = f"/fsx/eodc/mursst_zarr/{path}"
 numcodecs.blosc.use_threads = False
 print(f"zarr store directory: {store_dir}")
 
