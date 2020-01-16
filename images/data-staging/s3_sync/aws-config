@@ -1,0 +1,9 @@
+[profile default]
+s3 =
+  max_concurrent_requests = 40
+  max_queue_size = 10000
+  multipart_threshold = 64MB
+  multipart_chunksize = 16MB
+  max_bandwidth = 20GB/s
+  use_accelerate_endpoint = true
+  addressing_style = path

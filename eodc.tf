@@ -59,6 +59,15 @@ data "template_file" "netcdf_to_zarr_task_definition" {
   }
 }
 
+data "template_file" "s3_sync_task_definition" {
+  template = "${file("task-definitions/data-staging/s3_sync.json.tpl")}"
+
+  vars = {
+    aws_account_id = data.aws_caller_identity.current.account_id
+    aws_region = data.aws_region.current.name
+  }
+}
+
 resource "aws_launch_configuration" "as_conf" {
   name          = "eodc-ecs-cluster"
   image_id      = data.aws_ami.amazon-linux-2-ecs-optimized.id
@@ -71,7 +80,7 @@ resource "aws_launch_configuration" "as_conf" {
 resource "aws_autoscaling_group" "ecs_asg" {
   availability_zones = ["us-east-1a"]
   desired_capacity   = 1
-  max_size           = 1
+  max_size           = 5
   min_size           = 1
   launch_configuration = aws_launch_configuration.as_conf.id
 
@@ -95,6 +104,16 @@ resource "aws_ecs_task_definition" "podaac_drive" {
 resource "aws_ecs_task_definition" "netcdf_to_zarr" {
   family = "eodc-netcdf_to_zarr"
   container_definitions = data.template_file.netcdf_to_zarr_task_definition.rendered
+
+  volume {
+    name      = "service-storage"
+    host_path = "/fsx"
+  }
+}
+
+resource "aws_ecs_task_definition" "s3_sync" {
+  family = "eodc-s3_sync"
+  container_definitions = data.template_file.s3_sync_task_definition.rendered
 
   volume {
     name      = "service-storage"

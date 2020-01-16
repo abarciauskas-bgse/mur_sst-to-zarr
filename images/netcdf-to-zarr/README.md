@@ -18,7 +18,11 @@ docker build -t $DOCKER_TAG .
 
 ## Run Container
 ```bash
-docker run -it -v /data:/data $DOCKER_TAG
+# Running locally
+docker run -it -v /Volumes:/Volumes -v \
+  /Users/aimeebarciauskas/DevSeed/mur_sst_to_zarr/eodc:/eodc $DOCKER_TAG \
+  /Volumes/files/allData/ghrsst/data/GDS2/L4/GLOB/JPL/MUR/v4.1 \
+  /eodc/mursst_zarr/2002 2002 152 1 5
 ```
 
 ## Push to AWS ECR
