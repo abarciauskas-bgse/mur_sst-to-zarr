@@ -8,14 +8,19 @@
 export DOCKER_TAG=eodc-mount-podaac-drive
 export WEBDAV_USER=<ADD ME>
 export WEBDAV_PASS=<ADD ME>
-docker build --build-arg WEBDAV_USER=$WEBDAV_USER --build-arg WEBDAV_PASS=$WEBDAV_PASS -t $DOCKER_TAG .
+docker build \
+  --build-arg WEBDAV_USER=$WEBDAV_USER \
+  --build-arg WEBDAV_PASS=$WEBDAV_PASS \
+  --build-arg AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
+  --build-arg AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
+  -t $DOCKER_TAG .
 ```
 
 ## Run Container
 ```bash
-docker run -it -v /data:/data --privileged --cap-add=SYS_ADMIN --device /dev/fuse $DOCKER_TAG <PODAAC DRIVE PATH> <LOCAL FS PATH>
-# example <PODAAC DRIVE PATH>: allData/ghrsst/data/GDS2/L4/GLOB/JPL/MUR/v4.1/2003
-# example <LOCAL FS PATH>: mursst_netcdf
+docker run -it -v ~/s3fs:/s3fs --privileged --cap-add=SYS_ADMIN --device /dev/fuse $DOCKER_TAG <PODAAC DRIVE PATH> <LOCAL FS PATH>
+# Example
+docker run -it -v ~/s3fs:/s3fs --privileged --cap-add=SYS_ADMIN --device /dev/fuse $DOCKER_TAG allData/ghrsst/data/GDS2/L4/GLOB/JPL/MUR/v4.1/2006/002/ /s3fs/mursst_netcdf/2006/002/
 ```
 
 ## Push to AWS ECR

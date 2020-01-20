@@ -1,7 +1,8 @@
 #!/bin/bash
 
 mount.davfs https://podaac-tools.jpl.nasa.gov/drive/files /mnt/podaac_drive
+s3fs ds-data-projects:/eodc /s3fs/
 export PODAAC_DRIVE_PATH=$1
 export LOCAL_FS_PATH=$2
-cp -r /mnt/podaac_drive/$PODAAC_DRIVE_PATH /fsx/$LOCAL_FS_PATH
+rsync -a /mnt/podaac_drive/$PODAAC_DRIVE_PATH $LOCAL_FS_PATH
 

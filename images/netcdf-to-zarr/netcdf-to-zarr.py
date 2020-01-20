@@ -23,7 +23,6 @@ def generate_file_list(netcdf_prefix, start_doy, end_doy, year):
             doy = f"00{doy}"
         elif doy >= 10 and doy < 100:
             doy = f"0{doy}"
-        print(f"{netcdf_prefix}/{year}/{doy}/*.nc")
         file = glob.glob(f"{netcdf_prefix}/{year}/{doy}/*.nc")[0]
         fileObjs.append(file)
     return fileObjs
@@ -79,3 +78,4 @@ if __name__ == "__main__":
     client = Client(cluster)
     print(f"Dask client {client}")
     create_or_append_zarr(netcdf_prefix, zarr_store, year, start_day, number_batches_to_append, batch_size)
+
