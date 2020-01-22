@@ -71,7 +71,7 @@ data "template_file" "s3_sync_task_definition" {
 resource "aws_launch_configuration" "as_conf" {
   name          = "eodc-ecs-cluster"
   image_id      = data.aws_ami.amazon-linux-2-ecs-optimized.id
-  instance_type = "m5.2xlarge"
+  instance_type = "m5.16xlarge"
   user_data = data.template_file.ecs_instance_init.rendered
   key_name = var.keypair
   iam_instance_profile = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:instance-profile/ecsInstanceRole"
@@ -97,7 +97,7 @@ resource "aws_ecs_task_definition" "podaac_drive" {
 
   volume {
     name      = "service-storage"
-    host_path = "/s3fs"
+    host_path = "/s3fsx"
   }
 }
 
@@ -107,7 +107,7 @@ resource "aws_ecs_task_definition" "netcdf_to_zarr" {
 
   volume {
     name      = "service-storage"
-    host_path = "/s3fs"
+    host_path = "/s3fsx"
   }
 }
 
@@ -117,7 +117,18 @@ resource "aws_ecs_task_definition" "s3_sync" {
 
   volume {
     name      = "service-storage"
-    host_path = "/s3fs"
+    host_path = "/s3fsx"
   }
 }
+
+# resource "aws_fsx_lustre_file_system" "nasa_eodc" {
+#   import_path      = "s3://ds-data-projects/eodc"
+#   storage_capacity = 7200
+#   subnet_ids       = ["subnet-ced1f5e6"]
+# 
+#   tags {
+#     key                 = "project"
+#     value               = "eodc"
+#   }
+# }
 

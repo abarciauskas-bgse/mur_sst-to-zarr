@@ -8,7 +8,7 @@
     "privileged": true,
     "mountPoints": [{
       "sourceVolume": "service-storage",
-      "containerPath": "/s3fs"
+      "containerPath": "/s3fsx"
     }],
     "logConfiguration": {
       "logDriver": "awslogs",

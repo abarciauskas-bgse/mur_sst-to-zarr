@@ -8,7 +8,7 @@
     "essential": true,
     "mountPoints": [{
       "sourceVolume": "service-storage",
-      "containerPath": "/s3fs"
+      "containerPath": "/s3fsx"
     }],
     "portMappings": [{
       "hostPort": 8888,

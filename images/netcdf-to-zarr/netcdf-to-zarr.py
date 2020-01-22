@@ -62,7 +62,7 @@ def create_or_append_zarr(netcdf_prefix, zarr_store, year, start_doy, number_bat
         print(f"Done with this batch")
         print()
 
-# python netcdf-to-zarr.py /fsx/eodc/mursst_netcdf /fsx/edoc/mursst_zarr/2002-2004 2005 1 1 5
+# python netcdf-to-zarr.py /s3fsx/eodc/mursst_netcdf /s3fsx/eodc/mursst_zarr/5x1799x3600 2010 1 1 5
 # python netcdf-to-zarr.py /Volumes/files/allData/ghrsst/data/GDS2/L4/GLOB/JPL/MUR/v4.1 eodc/mursst_zarr/2002 2002 1 1 5
 if __name__ == "__main__":
     # Invariants - but could be made configurable
