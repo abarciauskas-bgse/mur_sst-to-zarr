@@ -13,7 +13,10 @@ docker build -t $DOCKER_TAG -f Dockerfile.base .
 
 ```bash
 export DOCKER_TAG=eodc-netcdf-to-zarr
-docker build -t $DOCKER_TAG .
+docker build \
+  --build-arg WEBDAV_USER=$WEBDAV_USER \
+  --build-arg WEBDAV_PASS=$WEBDAV_PASS \
+  -t $DOCKER_TAG .
 ```
 
 ## Run Container

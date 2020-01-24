@@ -1,5 +1,6 @@
 #!/bin/bash
 
+mount.davfs https://podaac-tools.jpl.nasa.gov/drive/files /mnt/podaac_drive
 source activate netcdf_to_zarr
 export NETCDF_DIR=$1
 if [[ -z "${NETCDF_DIR}" ]]; then

@@ -4,8 +4,15 @@
     "image":
     "${aws_account_id}.dkr.ecr.${aws_region}.amazonaws.com/eodc-netcdf-to-zarr",
     "cpu": 30,
-    "memory": 24000,
+    "memory": 100000,
     "essential": true,
+    "devices": ["/dev/fuse"],
+    "privileged": true,
+    "linuxParameters": {
+      "capabilities": {
+        "add": ["SYS_ADMIN"]
+      }
+    },
     "mountPoints": [{
       "sourceVolume": "service-storage",
       "containerPath": "/s3fsx"
