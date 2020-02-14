@@ -1,19 +1,24 @@
-## MUR SST to Zarr
+# MUR SST to Zarr
 
-Scripts for generating zarr from MUR SST netcdf 
+Steps and scripts for generating zarr from MUR SST netcdf.
 
+## High-Level Steps
 
-### Create and load python virtual environment
+1. Mount PO.DAAC drive as a local filesystem
+2. Run [Create% Zarr Stores.ipynb](https://github.com/abarciauskas-bgse/mur_sst-to-zarr/blob/master/notebooks/Create%20Zarr%20Stores.ipynb)
+3. Sync zarr store to S3
 
-```bash
-~/miniconda3/bin/conda create -f environment.yml
-source ~/miniconda3/bin/activate netcdf_to_zarr
-jupyter notebook
-```
+You can do this both on a local machine or a remote server.
 
-### Mount PO.DAAC drive as a local filesystem
+Docker images for each of these steps are stored in [/images](https://github.com/abarciauskas-bgse/mur_sst-to-zarr/tree/master/images).
+
+In practice, I used [AWS FSx](https://aws.amazon.com/fsx/) and S3 repository integration to sync both NetCDF files and Zarr store.
+
+## 1. Mount PO.DAAC drive to the local filesystem
 
 Requires WebDAV credentials.
+
+Note there is also a docker image to do this: [podaac_drive](https://github.com/abarciauskas-bgse/mur_sst-to-zarr/tree/master/images/data-staging/podaac_drive).
 
 #### MacOSX
 
@@ -39,25 +44,21 @@ docker run -it -v /data/mursst_netcdf:/data/mursst_netcdf --privileged --cap-add
 
 In practice, opening a set of 5 files using xr.open_mfdataset took over 3 minutes using this method, so it's probably not better than using a developer's machine with a HD attached.
 
-## Tests
+## 2. Running the Notebook
 
-### Creating Zarr files
+### Use Conda and virtualenv
 
-#### Attached PO.DAAC Drive, Local Cluster
+```bash
+~/miniconda3/bin/conda create -f environment.yml
+source ~/miniconda3/bin/activate netcdf_to_zarr
+jupyter notebook
+```
 
-* Using attached PO.DAAC drive
-* Chunking 500x500x5
-* 2 batches of 5 days took 46 minutes
-* Assuming a linear relationship, this is 5 minutes per day or ~31 hours for a year
+### Use docker
 
+[netcdf-to-zarr](https://github.com/abarciauskas-bgse/mur_sst-to-zarr/tree/master/images/netcdf-to-zarr)
 
-#### HD, Local Cluster
+## 3. Sync to S3
 
-* Using attached HD
-* Chunking 500x500x5
-* 2 batches of 1 days took 8 minutes
-* Assuming a linear relationship, this is 4 minutes per day or ~24 hours for a year
-
-
-
+[s3_sync](https://github.com/abarciauskas-bgse/mur_sst-to-zarr/tree/master/images/data-staging/s3_sync)
 
