@@ -5,7 +5,7 @@ Steps and scripts for generating zarr from MUR SST netcdf.
 ## High-Level Steps
 
 1. Mount PO.DAAC drive as a local filesystem
-2. Run [Create% Zarr Stores.ipynb](https://github.com/abarciauskas-bgse/mur_sst-to-zarr/blob/master/notebooks/Create%20Zarr%20Stores.ipynb)
+2. Run [Create Zarr Stores.ipynb](https://github.com/abarciauskas-bgse/mur_sst-to-zarr/blob/master/notebooks/Create%20Zarr%20Stores.ipynb)
 3. Sync zarr store to S3
 
 You can do this both on a local machine or a remote server.
