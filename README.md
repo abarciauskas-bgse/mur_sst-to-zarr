@@ -49,7 +49,9 @@ In practice, opening a set of 5 files using xr.open_mfdataset took over 3 minute
 ### Use Conda and virtualenv
 
 ```bash
-~/miniconda3/bin/conda create -f environment.yml
+git clone git@github.com:abarciauskas-bgse/mur_sst-to-zarr.git
+cd mur_sst-to-zarr
+~/miniconda3/bin/conda create -f images/netcdf-to-zarr/environment.yml
 source ~/miniconda3/bin/activate netcdf_to_zarr
 jupyter notebook
 ```
