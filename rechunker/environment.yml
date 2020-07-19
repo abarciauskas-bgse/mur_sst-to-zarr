@@ -1,0 +1,11 @@
+name: zarr_rechunker
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - dask
+  - s3fs
+  - pip:
+    - ipykernel 
+    - ipywidgets
+    - rechunker
