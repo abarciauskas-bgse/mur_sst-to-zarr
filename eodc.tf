@@ -41,26 +41,8 @@ data "template_file" "ecs_instance_init" {
   }
 }
 
-data "template_file" "podaac_drive_task_definition" {
-  template = "${file("task-definitions/data-staging/podaac_drive.json.tpl")}"
-
-  vars = {
-    aws_account_id = data.aws_caller_identity.current.account_id
-    aws_region = data.aws_region.current.name
-  }
-}
-
-data "template_file" "netcdf_to_zarr_task_definition" {
-  template = "${file("task-definitions/netcdf-to-zarr.json.tpl")}"
-
-  vars = {
-    aws_account_id = data.aws_caller_identity.current.account_id
-    aws_region = data.aws_region.current.name
-  }
-}
-
-data "template_file" "s3_sync_task_definition" {
-  template = "${file("task-definitions/data-staging/s3_sync.json.tpl")}"
+data "template_file" "zarr_rechunker_task_definition" {
+  template = "${file("task-definitions/zarr_rechunker.json.tpl")}"
 
   vars = {
     aws_account_id = data.aws_caller_identity.current.account_id
@@ -71,7 +53,7 @@ data "template_file" "s3_sync_task_definition" {
 resource "aws_launch_configuration" "as_conf" {
   name          = "eodc-ecs-cluster"
   image_id      = data.aws_ami.amazon-linux-2-ecs-optimized.id
-  instance_type = "r5.16xlarge"
+  instance_type = "m5.2xlarge"
   user_data = data.template_file.ecs_instance_init.rendered
   key_name = var.keypair
   iam_instance_profile = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:instance-profile/ecsInstanceRole"
@@ -99,44 +81,8 @@ resource "aws_autoscaling_group" "ecs_asg" {
   }
 }
 
-resource "aws_ecs_task_definition" "podaac_drive" {
-  family = "eodc-podaac_drive"
-  container_definitions = data.template_file.podaac_drive_task_definition.rendered
-
-  volume {
-    name      = "service-storage"
-    host_path = "/s3fsx"
-  }
+resource "aws_ecs_task_definition" "zarr_rechunker" {
+  family = "zarr_rechunker"
+  container_definitions = data.template_file.zarr_rechunker_task_definition.rendered
 }
-
-resource "aws_ecs_task_definition" "netcdf_to_zarr" {
-  family = "eodc-netcdf_to_zarr"
-  container_definitions = data.template_file.netcdf_to_zarr_task_definition.rendered
-
-  volume {
-    name      = "service-storage"
-    host_path = "/s3fsx"
-  }
-}
-
-resource "aws_ecs_task_definition" "s3_sync" {
-  family = "eodc-s3_sync"
-  container_definitions = data.template_file.s3_sync_task_definition.rendered
-
-  volume {
-    name      = "service-storage"
-    host_path = "/s3fsx"
-  }
-}
-
-# resource "aws_fsx_lustre_file_system" "nasa_eodc" {
-#   import_path      = "s3://ds-data-projects/eodc"
-#   storage_capacity = 7200
-#   subnet_ids       = ["subnet-ced1f5e6"]
-# 
-#   tags {
-#     key                 = "project"
-#     value               = "eodc"
-#   }
-# }
 

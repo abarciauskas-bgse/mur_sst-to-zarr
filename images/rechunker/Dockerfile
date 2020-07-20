@@ -7,5 +7,6 @@ COPY environment.yml environment.yml
 RUN conda env create -f environment.yml
 COPY rechunk.py rechunk.py
 COPY run.sh run.sh
+COPY working.ipynb working.ipynb
 
 ENTRYPOINT ["./run.sh"]
