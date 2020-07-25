@@ -52,8 +52,12 @@ data "template_file" "zarr_rechunker_task_definition" {
 
 resource "aws_launch_configuration" "as_conf" {
   name          = "eodc-ecs-cluster"
-  image_id      = data.aws_ami.amazon-linux-2-ecs-optimized.id
-  instance_type = "m5.2xlarge"
+  image_id      = "ami-03898ad5ed9135f49" 
+  # Ideally we can dynamically set the image id but this will force the cluster
+  # to attempt to destroy and recreate, which will fail because it's attached to
+  # an ASG
+  # image_id    = data.aws_ami.amazon-linux-2-ecs-optimized.id
+  instance_type = "r5.8xlarge"
   user_data = data.template_file.ecs_instance_init.rendered
   key_name = var.keypair
   iam_instance_profile = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:instance-profile/ecsInstanceRole"
