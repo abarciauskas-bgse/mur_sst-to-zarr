@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "us-east-1"
+  region = "us-west-2"
 }
 
 data "aws_caller_identity" "current" {}
@@ -29,7 +29,7 @@ data "aws_ami" "amazon-linux-2-ecs-optimized" {
 
  filter {
    name   = "name"
-   values = ["*amazon-ecs-optimized"]
+   values = ["amzn2-ami-ecs*"]
  }
 }
 
@@ -52,12 +52,11 @@ data "template_file" "zarr_rechunker_task_definition" {
 
 resource "aws_launch_configuration" "as_conf" {
   name          = "eodc-ecs-cluster"
-  image_id      = "ami-03898ad5ed9135f49" 
   # Ideally we can dynamically set the image id but this will force the cluster
   # to attempt to destroy and recreate, which will fail because it's attached to
   # an ASG
-  # image_id    = data.aws_ami.amazon-linux-2-ecs-optimized.id
-  instance_type = "r5.8xlarge"
+  image_id    = data.aws_ami.amazon-linux-2-ecs-optimized.id
+  instance_type = "r5.16xlarge"
   user_data = data.template_file.ecs_instance_init.rendered
   key_name = var.keypair
   iam_instance_profile = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:instance-profile/ecsInstanceRole"
@@ -72,7 +71,7 @@ resource "aws_launch_configuration" "as_conf" {
 }
 
 resource "aws_autoscaling_group" "ecs_asg" {
-  availability_zones = ["us-east-1a"]
+  availability_zones = ["us-west-2a"]
   desired_capacity   = 1
   max_size           = 5
   min_size           = 1
