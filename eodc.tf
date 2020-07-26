@@ -52,7 +52,7 @@ data "template_file" "zarr_rechunker_task_definition" {
 
 resource "aws_launch_configuration" "as_conf" {
   name          = "eodc-ecs-cluster"
-  # Ideally we can dynamically set the image id but this will force the cluster
+  # Note dynamically setting the image id means new images will force the cluster
   # to attempt to destroy and recreate, which will fail because it's attached to
   # an ASG
   image_id    = data.aws_ami.amazon-linux-2-ecs-optimized.id
