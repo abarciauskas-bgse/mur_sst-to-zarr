@@ -5,8 +5,7 @@ RUN apt-get -y install gcc g++
 
 COPY environment.yml environment.yml
 RUN conda env create -f environment.yml
-COPY rechunk.py rechunk.py
 COPY run.sh run.sh
-COPY working.ipynb working.ipynb
+COPY Rechunking_Zarr.ipynb Rechunking_Zarr.ipynb
 
 ENTRYPOINT ["./run.sh"]
