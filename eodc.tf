@@ -62,7 +62,7 @@ resource "aws_launch_configuration" "as_conf" {
   iam_instance_profile = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:instance-profile/ecsInstanceRole"
 
   root_block_device {
-    volume_size = 200
+    volume_size = 3200
   }
   ebs_block_device {
     device_name = "/dev/xvdcz"

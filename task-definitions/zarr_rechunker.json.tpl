@@ -3,8 +3,7 @@
     "name": "eodc-netcdf-to-zarr-task-def",
     "image":
     "${aws_account_id}.dkr.ecr.us-east-1.amazonaws.com/zarr-rechunker",
-    "cpu": 30,
-    "memory": 100000,
+    "memory": 256000,
     "portMappings": [{
       "hostPort": 8888,
       "protocol": "tcp",
