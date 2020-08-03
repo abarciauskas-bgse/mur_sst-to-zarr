@@ -50,6 +50,15 @@ data "template_file" "zarr_rechunker_task_definition" {
   }
 }
 
+data "template_file" "s3_sync_task_definition" {
+  template = "${file("task-definitions/data-staging/s3_sync.json.tpl")}"
+
+  vars = {
+    aws_account_id = data.aws_caller_identity.current.account_id
+    aws_region = data.aws_region.current.name
+  }
+}
+
 resource "aws_launch_configuration" "as_conf" {
   name          = "eodc-ecs-cluster"
   # Note dynamically setting the image id means new images will force the cluster
@@ -62,7 +71,7 @@ resource "aws_launch_configuration" "as_conf" {
   iam_instance_profile = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:instance-profile/ecsInstanceRole"
 
   root_block_device {
-    volume_size = 3200
+    volume_size = 200
   }
   ebs_block_device {
     device_name = "/dev/xvdcz"
@@ -72,9 +81,9 @@ resource "aws_launch_configuration" "as_conf" {
 
 resource "aws_autoscaling_group" "ecs_asg" {
   availability_zones = ["us-west-2a"]
-  desired_capacity   = 0
+  desired_capacity   = 1
   max_size           = 5
-  min_size           = 0
+  min_size           = 1
   launch_configuration = aws_launch_configuration.as_conf.id
 
   tag {
@@ -87,5 +96,10 @@ resource "aws_autoscaling_group" "ecs_asg" {
 resource "aws_ecs_task_definition" "zarr_rechunker" {
   family = "zarr_rechunker"
   container_definitions = data.template_file.zarr_rechunker_task_definition.rendered
+}
+
+resource "aws_ecs_task_definition" "s3_sync" {
+  family = "s3_sync"
+  container_definitions = data.template_file.s3_sync_task_definition.rendered
 }
 
